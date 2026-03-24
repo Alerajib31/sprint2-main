@@ -11,7 +11,11 @@ from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.core.files import File
 from django.utils import timezone
+
+import os
+from pathlib import Path
 
 from accounts.models import CustomerProfile, ProducerProfile
 from cart.models import Cart, CartItem
@@ -205,6 +209,20 @@ class Command(BaseCommand):
 
         today = date.today()
 
+        # Map product names to pre-made SVG images in media/products/
+        image_map = {
+            'Heritage Tomatoes': 'heritage-tomatoes.svg',
+            'Courgettes':        'courgettes.svg',
+            'New Potatoes':      'new-potatoes.svg',
+            'Mixed Salad Leaves':'mixed-salad-leaves.svg',
+            'Cox Apples':        'cox-apples.svg',
+            'Strawberries':      'strawberries.svg',
+            'Conference Pears':  'conference-pears.svg',
+            'Whole Milk':        'whole-milk.svg',
+            'Free-Range Eggs':   'free-range-eggs.svg',
+            'Mature Cheddar':    'mature-cheddar.svg',
+        }
+
         raw = [
             # ── Bob – Hillside Farm ──────────────────────────────────────────
             dict(
@@ -284,6 +302,8 @@ class Command(BaseCommand):
             ),
         ]
 
+        media_root = Path(__file__).resolve().parents[3] / 'media' / 'products'
+
         products = {}
         for kwargs in raw:
             p, created = Product.objects.get_or_create(
@@ -295,6 +315,17 @@ class Command(BaseCommand):
                 ok(f"Product: {p.name} ({p.producer.business_name})")
             else:
                 skip(p.name)
+
+            # Assign image if not already set
+            if not p.image:
+                filename = image_map.get(p.name)
+                if filename:
+                    img_path = media_root / filename
+                    if img_path.exists():
+                        with open(img_path, 'rb') as f:
+                            p.image.save(filename, File(f), save=True)
+                        ok(f"  Image assigned: {p.name}")
+
             products[p.name] = p
         return products
 
