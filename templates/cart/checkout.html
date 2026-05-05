@@ -3,43 +3,44 @@
 {% block title %}Checkout — Bristol Food Network{% endblock %}
 
 {% block content %}
-<h2 class="mb-4"><i class="bi bi-bag-check me-2"></i>Checkout</h2>
+<h2 class="mb-4" data-reveal><i class="bi bi-bag-check me-2"></i>Checkout</h2>
 
 <div class="row g-4">
     <div class="col-lg-8" data-reveal="left">
-        <div class="card">
-            <div class="card-header fw-semibold"><i class="bi bi-truck me-2"></i>Delivery Details</div>
-            <div class="card-body">
+        <div class="card shadow-lg border-0" style="border-radius: var(--radius-2xl);">
+            <div class="card-header text-white py-3" style="background: linear-gradient(135deg, var(--forest), var(--forest-dark)); border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;">
+                <h5 class="mb-0"><i class="bi bi-truck me-2"></i>Delivery Details</h5>
+            </div>
+            <div class="card-body p-4 p-lg-5">
                 <form method="post">
                     {% csrf_token %}
 
-                    <div class="mb-3">
-                        <label for="id_delivery_address" class="form-label">Delivery Address</label>
+                    <div class="input-icon-group mb-3">
+                        <i class="bi bi-geo-alt input-icon input-icon-top"></i>
+                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Delivery address</label>
                         {{ form.delivery_address }}
-                        {% if form.delivery_address.errors %}
-                            <div class="text-danger small mt-1">{{ form.delivery_address.errors.0 }}</div>
-                        {% endif %}
+                        {% if form.delivery_address.errors %}<div class="text-danger small mt-1">{{ form.delivery_address.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        <label for="id_delivery_date" class="form-label">Delivery Date</label>
+                    <div class="input-icon-group mb-3">
+                        <i class="bi bi-calendar-event input-icon"></i>
+                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Delivery date</label>
                         {{ form.delivery_date }}
-                        <div class="form-text">Must be at least 48 hours from now.</div>
-                        {% if form.delivery_date.errors %}
-                            <div class="text-danger small mt-1">{{ form.delivery_date.errors.0 }}</div>
-                        {% endif %}
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i> Minimum 48 hours lead time for delivery.
+                        </div>
+                        {% if form.delivery_date.errors %}<div class="text-danger small mt-1">{{ form.delivery_date.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="mb-4">
-                        <label for="id_special_instructions" class="form-label">Special Instructions <span class="text-muted fw-normal">(optional)</span></label>
+                    <div class="input-icon-group mb-4">
+                        <i class="bi bi-chat-left-text input-icon input-icon-top"></i>
+                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Special instructions</label>
                         {{ form.special_instructions }}
-                        {% if form.special_instructions.errors %}
-                            <div class="text-danger small mt-1">{{ form.special_instructions.errors.0 }}</div>
-                        {% endif %}
+                        {% if form.special_instructions.errors %}<div class="text-danger small mt-1">{{ form.special_instructions.errors.0 }}</div>{% endif %}
                     </div>
 
                     <button type="submit" class="btn btn-success btn-lg w-100">
-                        <i class="bi bi-lock me-2"></i> Place Order
+                        <i class="bi bi-lock-fill me-2"></i> Place Order
                     </button>
                 </form>
             </div>
@@ -47,28 +48,35 @@
     </div>
 
     <div class="col-lg-4" data-reveal="right">
-        <div class="card sticky-top" style="top: 6rem;">
-            <div class="card-header fw-semibold"><i class="bi bi-list-ul me-2"></i>Order Summary</div>
+        <div class="card shadow-lg sticky-top" style="top: 6rem; border-radius: var(--radius-2xl);">
+            <div class="card-header text-white py-3" style="background: linear-gradient(135deg, var(--forest), var(--forest-dark)); border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;">
+                <h6 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h6>
+            </div>
             <div class="card-body p-0">
-                <table class="table table-sm mb-0">
+                <table class="table table-borderless mb-0">
                     <tbody>
                         {% for item in cart_items %}
                         <tr>
-                            <td style="font-size: 0.875rem;">{{ item.product.name }} <span class="text-muted">×{{ item.quantity }}</span></td>
-                            <td class="text-end fw-medium">£{{ item.line_total }}</td>
+                            <td class="ps-3" style="font-size: 0.875rem;">
+                                <span class="fw-medium">{{ item.product.name }}</span>
+                                <small class="text-muted d-block">×{{ item.quantity }}</small>
+                            </td>
+                            <td class="text-end pe-3 fw-semibold">£{{ item.line_total }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                     <tfoot>
-                        <tr class="table-light">
-                            <td class="fw-semibold">Total</td>
-                            <td class="text-end fw-bold" style="font-family: 'Fraunces', serif; font-size: 1.1rem; color: #2F5A3F;">£{{ total }}</td>
+                        <tr style="border-top: 2px solid var(--border);">
+                            <td class="ps-3 fw-bold pt-3">Total</td>
+                            <td class="text-end pe-3 fw-bold pt-3" style="font-family: 'Fraunces', serif; font-size: 1.2rem; color: var(--forest);">£{{ total }}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-            <div class="card-footer text-muted small">
-                A 5% platform fee is included in your total. Minimum 48 hours lead time for delivery.
+            <div class="card-footer text-center" style="background: var(--cream); border-top: 1px solid var(--border-light); border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check me-1"></i> 5% platform fee included. 48hr lead time.
+                </small>
             </div>
         </div>
     </div>

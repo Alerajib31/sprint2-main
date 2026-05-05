@@ -4,37 +4,39 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-7">
+    <div class="col-lg-8 col-xl-7">
 
-        <div class="d-flex align-items-center mb-4">
-            <div>
-                <h2 class="mb-0">My Profile</h2>
-                <span class="badge bg-{% if profile_user.role == 'producer' %}warning text-dark{% elif profile_user.role == 'customer' %}success{% else %}secondary{% endif %} mt-1">
-                    {{ profile_user.get_role_display }}
-                </span>
+        <div class="text-center mb-4" data-reveal>
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--cream), var(--cream-dark)); border: 2px solid var(--border);">
+                <i class="bi bi-person-fill" style="font-size: 2rem; color: var(--ink-muted);"></i>
             </div>
+            <h3 class="mb-1">{{ profile_user.get_full_name|default:profile_user.email }}</h3>
+            <span class="badge bg-{% if profile_user.role == 'producer' %}warning text-dark{% elif profile_user.role == 'customer' %}success{% else %}secondary{% endif %} px-3 py-2">
+                <i class="bi bi-{% if profile_user.role == 'producer' %}shop{% else %}person{% endif %} me-1"></i> {{ profile_user.get_role_display }}
+            </span>
         </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Account Details</h5>
-            </div>
+        <div class="card shadow-sm mb-3" data-reveal>
             <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Email</dt>
-                    <dd class="col-sm-8">{{ profile_user.email }}</dd>
-                    <dt class="col-sm-4">Member since</dt>
-                    <dd class="col-sm-8">{{ profile_user.date_joined|date:"d F Y" }}</dd>
-                </dl>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted);">Email</div>
+                        <div class="fw-medium">{{ profile_user.email }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted);">Member since</div>
+                        <div class="fw-medium">{{ profile_user.date_joined|date:"d F Y" }}</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         {% if form %}
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h5 class="mb-0">Edit Profile</h5>
+        <div class="card shadow-lg border-0" style="border-radius: var(--radius-2xl);" data-reveal="scale">
+            <div class="card-header text-white py-3" style="background: linear-gradient(135deg, var(--forest), var(--forest-dark)); border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;">
+                <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Profile</h5>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-4 p-lg-5">
                 {% if form.non_field_errors %}
                     <div class="alert alert-danger">
                         {% for error in form.non_field_errors %}{{ error }}{% endfor %}
@@ -44,75 +46,91 @@
                 <form method="post" novalidate>
                     {% csrf_token %}
 
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label class="form-label">First name</label>
-                            {{ form.first_name }}
-                            {% if form.first_name.errors %}
-                                <div class="text-danger small">{{ form.first_name.errors.0 }}</div>
-                            {% endif %}
+                    <div class="section-divider">
+                        <i class="bi bi-person"></i>
+                        <span>Personal Info</span>
+                    </div>
+
+                    <div class="row g-3 mb-2">
+                        <div class="col-md-6">
+                            <div class="input-icon-group">
+                                <i class="bi bi-person input-icon"></i>
+                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">First name</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
+                            </div>
                         </div>
-                        <div class="col">
-                            <label class="form-label">Last name</label>
-                            {{ form.last_name }}
-                            {% if form.last_name.errors %}
-                                <div class="text-danger small">{{ form.last_name.errors.0 }}</div>
-                            {% endif %}
+                        <div class="col-md-6">
+                            <div class="input-icon-group">
+                                <i class="bi bi-person input-icon"></i>
+                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Last name</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Phone</label>
+                    <div class="input-icon-group mb-2">
+                        <i class="bi bi-telephone input-icon"></i>
+                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Phone</label>
                         {{ form.phone }}
                     </div>
 
                     {% if profile_user.role == 'producer' %}
-                        <hr>
-                        <div class="mb-3">
-                            <label class="form-label">Business / Farm name</label>
+                        <div class="section-divider">
+                            <i class="bi bi-building"></i>
+                            <span>Business</span>
+                        </div>
+
+                        <div class="input-icon-group mb-3">
+                            <i class="bi bi-shop input-icon"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Business / Farm name</label>
                             {{ form.business_name }}
-                            {% if form.business_name.errors %}
-                                <div class="text-danger small">{{ form.business_name.errors.0 }}</div>
-                            {% endif %}
+                            {% if form.business_name.errors %}<div class="text-danger small mt-1">{{ form.business_name.errors.0 }}</div>{% endif %}
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Business address</label>
+
+                        <div class="input-icon-group mb-3">
+                            <i class="bi bi-geo-alt input-icon input-icon-top"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Business address</label>
                             {{ form.business_address }}
-                            {% if form.business_address.errors %}
-                                <div class="text-danger small">{{ form.business_address.errors.0 }}</div>
-                            {% endif %}
+                            {% if form.business_address.errors %}<div class="text-danger small mt-1">{{ form.business_address.errors.0 }}</div>{% endif %}
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Postcode</label>
+
+                        <div class="input-icon-group mb-3">
+                            <i class="bi bi-mailbox input-icon"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Postcode</label>
                             {{ form.postcode }}
-                            {% if form.postcode.errors %}
-                                <div class="text-danger small">{{ form.postcode.errors.0 }}</div>
-                            {% endif %}
+                            {% if form.postcode.errors %}<div class="text-danger small mt-1">{{ form.postcode.errors.0 }}</div>{% endif %}
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">About your farm / business</label>
+
+                        <div class="input-icon-group mb-2">
+                            <i class="bi bi-journal-text input-icon input-icon-top"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">About your farm</label>
                             {{ form.description }}
                         </div>
                     {% else %}
-                        <hr>
-                        <div class="mb-3">
-                            <label class="form-label">Delivery address</label>
-                            {{ form.delivery_address }}
-                            {% if form.delivery_address.errors %}
-                                <div class="text-danger small">{{ form.delivery_address.errors.0 }}</div>
-                            {% endif %}
+                        <div class="section-divider">
+                            <i class="bi bi-truck"></i>
+                            <span>Delivery</span>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">Postcode</label>
+
+                        <div class="input-icon-group mb-3">
+                            <i class="bi bi-house input-icon input-icon-top"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Delivery address</label>
+                            {{ form.delivery_address }}
+                            {% if form.delivery_address.errors %}<div class="text-danger small mt-1">{{ form.delivery_address.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="input-icon-group mb-2">
+                            <i class="bi bi-mailbox input-icon"></i>
+                            <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Postcode</label>
                             {{ form.postcode }}
-                            {% if form.postcode.errors %}
-                                <div class="text-danger small">{{ form.postcode.errors.0 }}</div>
-                            {% endif %}
+                            {% if form.postcode.errors %}<div class="text-danger small mt-1">{{ form.postcode.errors.0 }}</div>{% endif %}
                         </div>
                     {% endif %}
 
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-check-circle"></i> Save Changes
+                    <button type="submit" class="btn btn-success btn-lg px-4 mt-3">
+                        <i class="bi bi-check-circle me-2"></i> Save Changes
                     </button>
                 </form>
             </div>

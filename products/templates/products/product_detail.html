@@ -72,11 +72,10 @@
                 {% if user.is_authenticated and user.role == 'customer' %}
                     <form action="{% url 'cart:add_to_cart' product.pk %}" method="post" class="d-flex align-items-center gap-2">
                         {% csrf_token %}
-                        <div class="input-group" style="max-width: 120px;">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<1)i.value=1;"><i class="bi bi-dash"></i></button>
-                            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}"
-                                   class="form-control text-center" style="border-radius: 0;">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ product.stock_quantity }})i.value={{ product.stock_quantity }};"><i class="bi bi-plus"></i></button>
+                        <div class="qty-stepper">
+                            <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<1)i.value=1;"><i class="bi bi-dash"></i></button>
+                            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+                            <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ product.stock_quantity }})i.value={{ product.stock_quantity }};"><i class="bi bi-plus"></i></button>
                         </div>
                         <button type="submit" class="btn btn-success flex-grow-1">
                             <i class="bi bi-cart-plus me-1"></i> Add to Cart

@@ -3,50 +3,55 @@
 {% block title %}Log In — Bristol Food Network{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center" data-reveal>
-    <div class="col-md-5 col-lg-4">
-        <div class="card shadow-sm overflow-hidden">
-            <div class="card-header bg-success text-white text-center py-3">
-                <h4 class="mb-0"><i class="bi bi-box-arrow-in-right me-2"></i>Welcome Back</h4>
+<div class="auth-page">
+    <div class="auth-card" data-reveal="scale">
+        <div class="auth-header">
+            <div class="auth-icon">
+                <i class="bi bi-basket2-fill"></i>
             </div>
-            <div class="card-body p-4">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags|default:'danger' }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+            <h4 class="mb-1">Welcome Back</h4>
+            <p>Sign in to your Bristol Food Network account</p>
+        </div>
 
-                <form method="post" novalidate>
-                    {% csrf_token %}
-
-                    <div class="mb-3">
-                        <label class="form-label">Email address</label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                            <div class="text-danger small">{{ form.email.errors.0 }}</div>
-                        {% endif %}
+        <div class="auth-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'danger' }} py-2 mb-3">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ message }}
                     </div>
+                {% endfor %}
+            {% endif %}
 
-                    <div class="mb-4">
-                        <label class="form-label">Password</label>
-                        {{ form.password }}
-                        {% if form.password.errors %}
-                            <div class="text-danger small">{{ form.password.errors.0 }}</div>
-                        {% endif %}
-                    </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            <i class="bi bi-box-arrow-in-right me-2"></i> Log In
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-center py-3" style="font-size: 0.875rem;">
-                <p class="mb-1 text-muted">Don't have an account?</p>
-                <a href="{% url 'accounts:register_customer' %}" class="fw-semibold text-decoration-none">Register as Customer</a>
-                <span class="text-muted mx-1">&middot;</span>
-                <a href="{% url 'accounts:register_producer' %}" class="fw-semibold text-decoration-none">Register as Producer</a>
+                <div class="input-icon-group mb-3">
+                    <i class="bi bi-envelope input-icon"></i>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="input-icon-group mb-4">
+                    <i class="bi bi-lock input-icon"></i>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback d-block">{{ form.password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                </button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <p class="mb-1 text-muted" style="font-size: 0.875rem;">Don't have an account?</p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'accounts:register_customer' %}" class="btn btn-outline-success btn-sm">Customer</a>
+                <a href="{% url 'accounts:register_producer' %}" class="btn btn-outline-success btn-sm">Producer</a>
             </div>
         </div>
     </div>

@@ -3,9 +3,9 @@
 {% block title %}Your Cart — Bristol Food Network{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
     <h2><i class="bi bi-cart3 me-2"></i>Your Cart</h2>
-    <a href="{% url 'products:product_list' %}" class="btn btn-outline-success btn-sm">
+    <a href="{% url 'products:product_list' %}" class="btn btn-outline-success">
         <i class="bi bi-arrow-left me-1"></i> Continue Shopping
     </a>
 </div>
@@ -21,8 +21,8 @@
     <div class="row g-4">
         <div class="col-lg-8" data-reveal="left">
             {% for producer_id, group in grouped.items %}
-            <div class="card mb-3 overflow-hidden">
-                <div class="card-header fw-semibold d-flex align-items-center gap-2" style="background: linear-gradient(135deg, #F8F4E9, #ECE5D2); border-bottom: 1px solid #E0D8C7;">
+            <div class="card shadow-sm mb-3 overflow-hidden">
+                <div class="card-header d-flex align-items-center gap-2 fw-semibold" style="background: linear-gradient(135deg, #F8F4E9, #ECE5D2); border-bottom: 1px solid #E0D8C7;">
                     <i class="bi bi-shop" style="color: #2F5A3F;"></i> {{ group.producer.business_name }}
                 </div>
                 <div class="card-body p-0">
@@ -46,14 +46,13 @@
                                     <small class="d-block text-muted" style="font-size: 0.75rem;">{{ item.product.unit }}</small>
                                 </td>
                                 <td class="text-center align-middle">
-                                    <form method="post" action="{% url 'cart:update_cart' item_id=item.pk %}" class="d-flex align-items-center justify-content-center gap-1">
+                                    <form method="post" action="{% url 'cart:update_cart' item_id=item.pk %}">
                                         {% csrf_token %}
-                                        <button type="button" class="btn btn-sm btn-outline-secondary px-2" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<0)i.value=0; i.form.submit();"><i class="bi bi-dash"></i></button>
-                                        <input type="number" name="quantity" value="{{ item.quantity }}"
-                                               min="0" max="{{ item.product.stock_quantity }}"
-                                               class="form-control form-control-sm text-center" style="width: 55px;"
-                                               onchange="this.form.submit()">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary px-2" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ item.product.stock_quantity }})i.value={{ item.product.stock_quantity }}; i.form.submit();"><i class="bi bi-plus"></i></button>
+                                        <div class="qty-stepper mx-auto">
+                                            <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<0)i.value=0; i.form.submit();"><i class="bi bi-dash"></i></button>
+                                            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.stock_quantity }}" onchange="this.form.submit()">
+                                            <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ item.product.stock_quantity }})i.value={{ item.product.stock_quantity }}; i.form.submit();"><i class="bi bi-plus"></i></button>
+                                        </div>
                                     </form>
                                 </td>
                                 <td class="text-end align-middle">£{{ item.product.price }}</td>
@@ -70,7 +69,7 @@
                             {% endfor %}
                         </tbody>
                         <tfoot>
-                            <tr class="table-light">
+                            <tr style="border-top: 2px solid var(--border);">
                                 <td colspan="3" class="text-end fw-semibold">Producer subtotal</td>
                                 <td class="text-end fw-semibold">£{{ group.subtotal }}</td>
                                 <td></td>
@@ -83,13 +82,13 @@
         </div>
 
         <div class="col-lg-4" data-reveal="right">
-            <div class="card sticky-top" style="top: 6rem;">
-                <div class="card-header bg-success text-white fw-semibold">
-                    <i class="bi bi-receipt me-1"></i> Order Summary
+            <div class="card shadow-lg sticky-top" style="top: 6rem; border-radius: var(--radius-2xl);">
+                <div class="card-header text-white py-3" style="background: linear-gradient(135deg, var(--forest), var(--forest-dark)); border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;">
+                    <h6 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h6>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2 align-items-center">
-                        <span style="font-size: 0.9rem; color: #5C544D;">Subtotal <span class="text-muted">({{ cart.item_count }} item{{ cart.item_count|pluralize }})</span></span>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Subtotal <small>({{ cart.item_count }} item{{ cart.item_count|pluralize }})</small></span>
                         <strong style="font-family: 'Fraunces', serif; font-size: 1.15rem;">£{{ total }}</strong>
                     </div>
                     <div class="d-flex justify-content-between text-muted small mb-3">
@@ -98,7 +97,7 @@
                     </div>
                     <hr>
                     <a href="{% url 'cart:checkout' %}" class="btn btn-success w-100 btn-lg">
-                        <i class="bi bi-lock me-1"></i> Proceed to Checkout
+                        <i class="bi bi-lock-fill me-2"></i> Proceed to Checkout
                     </a>
                 </div>
             </div>

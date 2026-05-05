@@ -1347,6 +1347,621 @@ footer.bg-dark .text-light { color: rgba(255, 255, 255, 0.7) !important; }
 }
 
 /* =============================================================
+   FORM ENHANCEMENTS — Floating Labels, Icons, Chips, Steppers
+   ============================================================= */
+
+/* Floating label input group */
+.input-icon-group {
+    position: relative;
+}
+
+.input-icon-group .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-muted);
+    font-size: 1.1rem;
+    z-index: 5;
+    pointer-events: none;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.input-icon-group .form-control,
+.input-icon-group .form-select {
+    padding-left: 2.75rem;
+}
+
+.input-icon-group textarea.form-control {
+    padding-left: 2.75rem;
+}
+
+.input-icon-group .input-icon-top {
+    top: 1rem;
+    transform: none;
+}
+
+.input-icon-group:focus-within .input-icon {
+    color: var(--forest);
+}
+
+/* Floating label — label sits inside input, floats up on focus/content */
+.form-floating-custom {
+    position: relative;
+    margin-bottom: 1.25rem;
+}
+
+.form-floating-custom .form-control,
+.form-floating-custom .form-select {
+    padding-top: 1.25rem;
+    padding-bottom: 0.5rem;
+    height: auto;
+    min-height: 52px;
+}
+
+.form-floating-custom .floating-label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    pointer-events: none;
+    transition: all 0.2s var(--ease-out);
+    background: transparent;
+    padding: 0 0.25rem;
+}
+
+.form-floating-custom .form-control:focus ~ .floating-label,
+.form-floating-custom .form-control:not(:placeholder-shown) ~ .floating-label,
+.form-floating-custom .form-select ~ .floating-label,
+.form-floating-custom .floating-label.active {
+    top: 0.5rem;
+    transform: translateY(0);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--forest);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.form-floating-custom textarea.form-control {
+    min-height: 100px;
+}
+
+.form-floating-custom textarea.form-control ~ .floating-label {
+    top: 1rem;
+    transform: none;
+}
+
+.form-floating-custom textarea.form-control:focus ~ .floating-label,
+.form-floating-custom textarea.form-control:not(:placeholder-shown) ~ .floating-label {
+    top: 0.4rem;
+    font-size: 0.7rem;
+}
+
+/* Section divider with label */
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0 1.5rem;
+}
+
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.section-divider span {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.section-divider i {
+    color: var(--forest);
+    font-size: 1rem;
+}
+
+/* Allergen toggle chips */
+.allergen-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.allergen-chip {
+    position: relative;
+}
+
+.allergen-chip input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.allergen-chip label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    background: #fff;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    user-select: none;
+}
+
+.allergen-chip label:hover {
+    border-color: var(--harvest);
+    background: #FFF8EE;
+    color: var(--harvest-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--harvest-glow);
+}
+
+.allergen-chip input:checked + label {
+    background: var(--harvest);
+    border-color: var(--harvest);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 12px var(--harvest-glow);
+}
+
+.allergen-chip input:checked + label::before {
+    content: '\F26B';
+    font-family: 'bootstrap-icons';
+    font-size: 0.85rem;
+}
+
+.allergen-chip input:focus-visible + label {
+    box-shadow: 0 0 0 4px var(--forest-glow);
+    border-color: var(--forest);
+}
+
+/* Organic toggle switch */
+.toggle-switch-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--cream);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.toggle-switch-row .form-check {
+    margin: 0;
+}
+
+.toggle-switch-row .form-check-input {
+    width: 2.5rem;
+    height: 1.35rem;
+    margin-top: 0;
+    cursor: pointer;
+}
+
+.toggle-switch-row .form-check-label {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Progress stepper for registration */
+.progress-stepper {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2rem;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-step .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    transition: all var(--duration) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.progress-step.active .step-circle {
+    background: var(--forest);
+    border-color: var(--forest);
+    color: #fff;
+    box-shadow: 0 0 0 6px var(--forest-glow);
+}
+
+.progress-step.completed .step-circle {
+    background: var(--forest);
+    border-color: var(--forest);
+    color: #fff;
+}
+
+.progress-step .step-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .progress-step .step-label {
+        display: inline;
+    }
+}
+
+.progress-step.active .step-label {
+    color: var(--forest);
+}
+
+.progress-connector {
+    width: 60px;
+    height: 2px;
+    background: var(--border);
+    margin: 0 0.5rem;
+    align-self: center;
+    transition: background var(--duration) var(--ease-out);
+}
+
+.progress-connector.completed {
+    background: var(--forest);
+}
+
+/* Form card with icon accent */
+.form-card-accent {
+    border-left: 4px solid var(--forest);
+}
+
+.form-card-accent.harvest {
+    border-left-color: var(--harvest);
+}
+
+/* Animated validation states */
+.form-control.is-valid,
+.form-select.is-valid,
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: var(--forest) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232F5A3F' stroke-width='2.5'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size: 18px;
+    padding-right: 2.5rem;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 4px rgba(217, 72, 59, 0.12);
+}
+
+.invalid-feedback {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--danger);
+}
+
+/* Inline field row with subtle separator */
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.field-row:last-child {
+    border-bottom: none;
+}
+
+.field-row .field-label-col {
+    flex: 0 0 140px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--ink);
+    padding-top: 0.5rem;
+}
+
+.field-row .field-input-col {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Card collapse section (for product form) */
+.collapsible-section .collapse-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-fast) var(--ease-out);
+    user-select: none;
+}
+
+.collapsible-section .collapse-header:hover {
+    background: var(--cream-dark);
+    border-color: var(--forest-light);
+}
+
+.collapsible-section .collapse-header .collapse-icon {
+    transition: transform var(--duration) var(--ease-out);
+    font-size: 1.25rem;
+    color: var(--ink-muted);
+}
+
+.collapsible-section.open .collapse-header .collapse-icon {
+    transform: rotate(180deg);
+    color: var(--forest);
+}
+
+.collapsible-section .collapse-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s var(--ease-out);
+    border: 1px solid transparent;
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.collapsible-section.open .collapse-body {
+    max-height: 2000px;
+    border-color: var(--border);
+    padding: 1.5rem;
+    background: #fff;
+}
+
+.collapsible-section.open .collapse-header {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: none;
+}
+
+/* Quantity stepper */
+.qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+}
+
+.qty-stepper button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.qty-stepper button:hover {
+    background: var(--forest);
+    color: #fff;
+}
+
+.qty-stepper input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: #fff;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Image upload zone */
+.image-upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--cream);
+    transition: all var(--duration-fast) var(--ease-out);
+    cursor: pointer;
+}
+
+.image-upload-zone:hover {
+    border-color: var(--forest-light);
+    background: #F0F4EC;
+}
+
+.image-upload-zone i {
+    font-size: 2rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+}
+
+.image-upload-zone .upload-text {
+    font-weight: 500;
+    color: var(--ink-light);
+    font-size: 0.85rem;
+}
+
+.image-upload-zone .upload-hint {
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+}
+
+.image-upload-zone input[type="file"] {
+    display: none;
+}
+
+/* Checkbox group grid for allergens (fallback) */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.4rem;
+}
+
+.checkbox-grid .form-check {
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--border-light);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.checkbox-grid .form-check:hover {
+    border-color: var(--harvest);
+    background: #FFF8EE;
+}
+
+.checkbox-grid .form-check:has(input:checked) {
+    background: var(--harvest);
+    border-color: var(--harvest);
+}
+
+.checkbox-grid .form-check:has(input:checked) .form-check-label {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Button row spacing */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Password strength meter */
+.password-strength {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.password-strength .strength-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s var(--ease-out), background 0.3s var(--ease-out);
+    width: 0;
+}
+
+.strength-weak { width: 25% !important; background: var(--danger); }
+.strength-fair { width: 50% !important; background: var(--harvest); }
+.strength-good { width: 75% !important; background: var(--info); }
+.strength-strong { width: 100% !important; background: var(--forest); }
+
+/* Auth page wrapper */
+.auth-page {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    border: none;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.auth-card .auth-header {
+    background: linear-gradient(135deg, var(--forest), var(--forest-dark));
+    padding: 2rem 2rem 1.5rem;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-card .auth-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(232, 145, 58, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.auth-card .auth-header .auth-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.auth-card .auth-header h4 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.auth-card .auth-header p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.auth-card .auth-body {
+    padding: 2rem;
+    background: #fff;
+}
+
+.auth-card .auth-footer {
+    padding: 1.25rem 2rem;
+    background: var(--cream);
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+/* =============================================================
    REDUCED MOTION
    ============================================================= */
 @media (prefers-reduced-motion: reduce) {
