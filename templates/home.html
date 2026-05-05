@@ -3,51 +3,89 @@
 {% block title %}Bristol Regional Food Network — Local Food, Delivered Fresh{% endblock %}
 
 {% block content %}
-<div class="px-4 py-5 text-center bg-light rounded-3 mb-4">
-    <i class="bi bi-basket2-fill text-success" style="font-size: 3rem;"></i>
-    <h1 class="display-5 fw-bold mt-3">Bristol Regional Food Network</h1>
-    <p class="col-lg-8 mx-auto lead text-muted">
-        Fresh, local food from producers within 20 miles of Bristol.
-        Support your local farmers and enjoy seasonal produce delivered to your door.
-    </p>
-    <div class="d-flex gap-2 justify-content-center mt-4">
-        <a href="{% url 'products:product_list' %}" class="btn btn-success btn-lg px-4">
-            <i class="bi bi-shop"></i> Browse Products
-        </a>
-        {% if not user.is_authenticated %}
-            <a href="{% url 'accounts:register_customer' %}" class="btn btn-outline-success btn-lg px-4">
-                <i class="bi bi-person-plus"></i> Join as Customer
+<!-- Hero Section -->
+<div class="px-4 py-5 text-center mb-5 position-relative overflow-hidden" style="background: linear-gradient(155deg, #2F5A3F 0%, #1E3B28 40%, #1A2E1F 100%); border-radius: 1.5rem; color: #fff;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(circle at 20% 50%, rgba(232,145,58,0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 100% 100%, 32px 32px; pointer-events: none;"></div>
+    <div class="position-relative" style="z-index: 1;">
+        <div class="mb-3 animate-fade-up">
+            <span class="badge px-3 py-2" style="background: rgba(232,145,58,0.25); color: #F5B96C; font-size: 0.85rem; border-radius: 9999px; font-weight: 600;">
+                <i class="bi bi-geo-alt-fill me-1"></i> Bristol &amp; Surrounding Areas
+            </span>
+        </div>
+        <h1 class="display-4 fw-bold mb-3" style="color: #fff; letter-spacing: -0.03em; line-height: 1.15;">
+            Fresh, Local Food<br class="d-none d-sm-block"> From Farm to Your Table
+        </h1>
+        <p class="col-lg-7 mx-auto lead mb-4" style="color: rgba(255,255,255,0.78); font-size: 1.1rem;">
+            Support local producers within 20 miles of Bristol. Seasonal produce, artisan goods, and farm-fresh ingredients delivered with care.
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
+            <a href="{% url 'products:product_list' %}" class="btn btn-lg px-4 fw-semibold" style="background: #E8913A; color: #fff; border: none; border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(232,145,58,0.35); transition: all 0.3s ease;">
+                <i class="bi bi-shop me-2"></i>Browse Products
             </a>
-        {% endif %}
+            {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:register_customer' %}" class="btn btn-lg px-4 fw-semibold" style="background: rgba(255,255,255,0.12); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 0.75rem; transition: all 0.3s ease;">
+                    <i class="bi bi-person-plus me-2"></i>Join as Customer
+                </a>
+            {% endif %}
+        </div>
     </div>
 </div>
 
+<!-- Stats Row -->
+<div class="row g-3 mb-5 stagger-children">
+    <div class="col-6 col-md-3">
+        <div class="stat-card stat-delivered">
+            <div class="stat-number">50+</div>
+            <div class="stat-label" style="color: #5C544D;">Local Producers</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card" style="--accent: #E8913A;">
+            <div class="stat-number" style="color: #E8913A;">20mi</div>
+            <div class="stat-label" style="color: #5C544D;">Max Distance</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card stat-ready">
+            <div class="stat-number">100%</div>
+            <div class="stat-label" style="color: #5C544D;">Traceable</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card stat-confirmed">
+            <div class="stat-number">14</div>
+            <div class="stat-label" style="color: #5C544D;">Allergens Tracked</div>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
 <div class="row g-4" data-reveal>
     <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <i class="bi bi-geo-alt-fill text-success" style="font-size: 2rem;"></i>
-                <h5 class="card-title mt-3">Locally Sourced</h5>
-                <p class="card-text text-muted">All producers are within 20 miles of Bristol, ensuring freshness and supporting the local economy.</p>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-geo-alt-fill"></i>
             </div>
+            <h5 class="fw-bold mb-2">Locally Sourced</h5>
+            <p class="mb-0" style="color: #5C544D; font-size: 0.9rem;">All producers are within 20 miles of Bristol, ensuring peak freshness and supporting the local economy.</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <i class="bi bi-calendar2-check text-success" style="font-size: 2rem;"></i>
-                <h5 class="card-title mt-3">Seasonal Produce</h5>
-                <p class="card-text text-muted">Shop what's in season for the best flavour and value. Our producers update availability throughout the year.</p>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-calendar2-check"></i>
             </div>
+            <h5 class="fw-bold mb-2">Seasonal Produce</h5>
+            <p class="mb-0" style="color: #5C544D; font-size: 0.9rem;">Shop what's in season for the best flavour and value. Our producers update availability throughout the year.</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
-                <h5 class="card-title mt-3">Allergen Information</h5>
-                <p class="card-text text-muted">Full allergen details on every product so you can shop with confidence. 14 UK major allergens listed.</p>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-shield-check"></i>
             </div>
+            <h5 class="fw-bold mb-2">Allergen Information</h5>
+            <p class="mb-0" style="color: #5C544D; font-size: 0.9rem;">Full allergen details on every product &mdash; all 14 UK major allergens clearly listed so you can shop with confidence.</p>
         </div>
     </div>
 </div>

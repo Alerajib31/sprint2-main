@@ -115,9 +115,48 @@
     {% block content %}{% endblock %}
 </main>
 
-<footer class="bg-dark text-light py-3 mt-5">
-    <div class="container text-center">
-        <p class="mb-0">Bristol Regional Food Network &mdash; Connecting local producers with the community</p>
+<footer class="bg-dark text-light">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row g-4 py-4">
+            <div class="col-md-5">
+                <h5 class="mb-3" style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 1.3rem;">
+                    <i class="bi bi-basket2-fill" style="color: #F5B96C;"></i> Bristol Food Network
+                </h5>
+                <p class="mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.9rem; max-width: 340px;">
+                    Connecting local food producers with the Bristol community. Fresh, seasonal, and sustainably sourced within 20 miles.
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h5 style="font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1rem;">Quick Links</h5>
+                <ul class="list-unstyled mb-0" style="font-size: 0.875rem;">
+                    <li class="mb-1"><a href="{% url 'products:product_list' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Browse Products</a></li>
+                    <li class="mb-1"><a href="{% url 'products:category_list' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Categories</a></li>
+                    <li class="mb-1"><a href="{% url 'products:product_search' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Search</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5 style="font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1rem;">Account</h5>
+                <ul class="list-unstyled mb-0" style="font-size: 0.875rem;">
+                    {% if user.is_authenticated %}
+                        <li class="mb-1"><a href="{% url 'accounts:profile' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">My Profile</a></li>
+                        {% if user.role == 'customer' %}
+                            <li class="mb-1"><a href="{% url 'cart:cart_detail' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">My Cart</a></li>
+                            <li class="mb-1"><a href="{% url 'cart:order_history' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Order History</a></li>
+                        {% elif user.role == 'producer' %}
+                            <li class="mb-1"><a href="{% url 'products:producer_dashboard' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Dashboard</a></li>
+                            <li class="mb-1"><a href="{% url 'orders:incoming_orders' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Orders</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li class="mb-1"><a href="{% url 'accounts:login' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Login</a></li>
+                        <li class="mb-1"><a href="{% url 'accounts:register_customer' %}" class="text-decoration-none" style="color: rgba(255,255,255,0.55);">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.08);">
+        <div class="text-center py-3" style="font-size: 0.8rem; color: rgba(255,255,255,0.35);">
+            <p class="mb-0">&copy; {% now "Y" %} Bristol Food Network. All rights reserved. &mdash; Made with <span style="color: #D9483B;">&#10084;</span> in Bristol</p>
+        </div>
     </div>
 </footer>
 

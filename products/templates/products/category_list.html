@@ -5,26 +5,29 @@
 {% block content %}
 <h2 class="mb-4">Browse by Category</h2>
 
-<div class="row g-4">
+<div class="row g-4 stagger-children">
     {% for category in categories %}
     <div class="col-sm-6 col-md-4">
         <a href="{% url 'products:products_by_category' category.slug %}" class="text-decoration-none">
-            <div class="card h-100 shadow-sm border-0 hover-shadow">
-                <div class="card-body text-center p-4">
-                    <i class="bi bi-tag-fill text-success" style="font-size: 2.5rem;"></i>
-                    <h5 class="card-title mt-3 text-dark">{{ category.name }}</h5>
-                    {% if category.description %}
-                        <p class="card-text text-muted small">{{ category.description }}</p>
-                    {% endif %}
-                    <span class="badge bg-success">{{ category.product_count }} product{{ category.product_count|pluralize }}</span>
+            <div class="feature-card h-100">
+                <div class="feature-icon">
+                    <i class="bi bi-tag-fill"></i>
                 </div>
+                <h5 class="fw-bold mb-2">{{ category.name }}</h5>
+                {% if category.description %}
+                    <p class="mb-2" style="font-size: 0.85rem; color: #5C544D;">{{ category.description }}</p>
+                {% endif %}
+                <span class="badge bg-success" style="font-size: 0.8rem;">{{ category.product_count }} product{{ category.product_count|pluralize }}</span>
             </div>
         </a>
     </div>
     {% empty %}
-    <div class="col-12 text-center py-5">
-        <i class="bi bi-tag text-muted" style="font-size: 3rem;"></i>
-        <p class="text-muted mt-3">No categories yet.</p>
+    <div class="col-12">
+        <div class="empty-state">
+            <div class="empty-icon"><i class="bi bi-tag"></i></div>
+            <h5>No categories yet</h5>
+            <p>Check back soon for product categories.</p>
+        </div>
     </div>
     {% endfor %}
 </div>
