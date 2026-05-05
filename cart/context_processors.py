@@ -1,10 +1,13 @@
 from .models import Cart
 
 
-def cart_count(request):
+def cart_context(request):
+    ctx = {'cart_count': 0, 'cart_product_ids': set()}
     if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'customer':
         try:
-            return {'cart_count': request.user.cart.item_count}
+            cart = Cart.objects.get(customer=request.user)
+            ctx['cart_count'] = cart.items.count()
+            ctx['cart_product_ids'] = set(cart.items.values_list('product_id', flat=True))
         except Cart.DoesNotExist:
-            return {'cart_count': 0}
-    return {'cart_count': 0}
+            pass
+    return ctx

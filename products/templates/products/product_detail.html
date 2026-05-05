@@ -15,7 +15,6 @@
 </nav>
 
 <div class="row g-4" data-reveal>
-    <!-- Product image -->
     <div class="col-md-5" data-reveal="left">
         <div class="card border-0 overflow-hidden" style="border-radius: 1.25rem;">
             {% if product.image %}
@@ -28,7 +27,6 @@
         </div>
     </div>
 
-    <!-- Product info -->
     <div class="col-md-7" data-reveal="right">
         <div class="mb-2">
             {% if product.availability_status == 'in_season' %}
@@ -63,24 +61,29 @@
 
         <p class="mb-4" style="font-size: 0.95rem; line-height: 1.7; color: #5C544D;">{{ product.description }}</p>
 
-        <!-- Stock & add to cart -->
         <div class="p-3 mb-4" style="background: #FDFBF5; border: 1px solid #EEE8DA; border-radius: 0.75rem;">
             {% if product.is_available %}
                 <div class="mb-3">
                     <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> In Stock &mdash; {{ product.stock_quantity }} available</span>
                 </div>
                 {% if user.is_authenticated and user.role == 'customer' %}
-                    <form action="{% url 'cart:add_to_cart' product.pk %}" method="post" class="d-flex align-items-center gap-2">
-                        {% csrf_token %}
-                        <div class="qty-stepper">
-                            <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<1)i.value=1;"><i class="bi bi-dash"></i></button>
-                            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
-                            <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ product.stock_quantity }})i.value={{ product.stock_quantity }};"><i class="bi bi-plus"></i></button>
-                        </div>
-                        <button type="submit" class="btn btn-success flex-grow-1">
-                            <i class="bi bi-cart-plus me-1"></i> Add to Cart
-                        </button>
-                    </form>
+                    {% if product.pk in cart_product_ids %}
+                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-success w-100">
+                            <i class="bi bi-check-circle me-1"></i> Already in Cart — View Cart
+                        </a>
+                    {% else %}
+                        <form action="{% url 'cart:add_to_cart' product.pk %}" method="post" class="d-flex align-items-center gap-2">
+                            {% csrf_token %}
+                            <div class="qty-stepper">
+                                <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<1)i.value=1;"><i class="bi bi-dash"></i></button>
+                                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+                                <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ product.stock_quantity }})i.value={{ product.stock_quantity }};"><i class="bi bi-plus"></i></button>
+                            </div>
+                            <button type="submit" class="btn btn-success flex-grow-1">
+                                <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                            </button>
+                        </form>
+                    {% endif %}
                 {% elif not user.is_authenticated %}
                     <a href="{% url 'accounts:login' %}" class="btn btn-outline-success w-100">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Log in to purchase
@@ -94,7 +97,6 @@
             {% endif %}
         </div>
 
-        <!-- Producer actions -->
         {% if user.is_authenticated and user.role == 'producer' and product.producer.user == user %}
             <div class="pt-3 border-top d-flex gap-2">
                 <a href="{% url 'products:product_edit' product.pk %}" class="btn btn-outline-primary btn-sm">

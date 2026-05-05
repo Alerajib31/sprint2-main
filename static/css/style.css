@@ -1350,18 +1350,24 @@ footer.bg-dark .text-light { color: rgba(255, 255, 255, 0.7) !important; }
    FORM ENHANCEMENTS — Floating Labels, Icons, Chips, Steppers
    ============================================================= */
 
-/* Floating label input group */
+/* Input icon group — icon positioned relative to the input field */
 .input-icon-group {
     position: relative;
+    margin-bottom: 0.25rem;
+}
+
+.input-icon-group > label.form-label {
+    display: block;
+    margin-bottom: 0.25rem;
 }
 
 .input-icon-group .input-icon {
     position: absolute;
     left: 14px;
-    top: 50%;
+    top: calc(50% + 0.35rem);
     transform: translateY(-50%);
     color: var(--ink-muted);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     z-index: 5;
     pointer-events: none;
     transition: color var(--duration-fast) var(--ease-out);
@@ -1374,70 +1380,62 @@ footer.bg-dark .text-light { color: rgba(255, 255, 255, 0.7) !important; }
 
 .input-icon-group textarea.form-control {
     padding-left: 2.75rem;
+    padding-top: 0.75rem;
 }
 
-.input-icon-group .input-icon-top {
-    top: 1rem;
+.input-icon-group textarea + .input-icon {
+    top: calc(0.75rem + 0.6rem);
     transform: none;
+    font-size: 1.05rem;
 }
 
-.input-icon-group:focus-within .input-icon {
+.input-icon-group:focus-within > .input-icon {
     color: var(--forest);
 }
 
-/* Floating label — label sits inside input, floats up on focus/content */
-.form-floating-custom {
+/* Form field wrapper with compact label */
+.form-field {
+    margin-bottom: 1rem;
+}
+
+.form-field .field-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+}
+
+.form-field .input-icon-group {
+    margin-bottom: 0;
+}
+
+/* Simplified input group - no extra label positioning needed */
+.simple-input-group {
     position: relative;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
-.form-floating-custom .form-control,
-.form-floating-custom .form-select {
-    padding-top: 1.25rem;
-    padding-bottom: 0.5rem;
-    height: auto;
-    min-height: 52px;
-}
-
-.form-floating-custom .floating-label {
+.simple-input-group .input-icon {
     position: absolute;
-    left: 1rem;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.9rem;
     color: var(--ink-muted);
+    font-size: 1.05rem;
+    z-index: 5;
     pointer-events: none;
-    transition: all 0.2s var(--ease-out);
-    background: transparent;
-    padding: 0 0.25rem;
+    transition: color var(--duration-fast) var(--ease-out);
 }
 
-.form-floating-custom .form-control:focus ~ .floating-label,
-.form-floating-custom .form-control:not(:placeholder-shown) ~ .floating-label,
-.form-floating-custom .form-select ~ .floating-label,
-.form-floating-custom .floating-label.active {
-    top: 0.5rem;
-    transform: translateY(0);
-    font-size: 0.7rem;
-    font-weight: 600;
+.simple-input-group .form-control {
+    padding-left: 2.75rem;
+}
+
+.simple-input-group:focus-within > .input-icon {
     color: var(--forest);
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-}
-
-.form-floating-custom textarea.form-control {
-    min-height: 100px;
-}
-
-.form-floating-custom textarea.form-control ~ .floating-label {
-    top: 1rem;
-    transform: none;
-}
-
-.form-floating-custom textarea.form-control:focus ~ .floating-label,
-.form-floating-custom textarea.form-control:not(:placeholder-shown) ~ .floating-label {
-    top: 0.4rem;
-    font-size: 0.7rem;
 }
 
 /* Section divider with label */

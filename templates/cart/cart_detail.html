@@ -1,107 +1,89 @@
 {% extends 'base.html' %}
 
-{% block title %}Your Cart — Bristol Food Network{% endblock %}
+{% block title %}My Cart — Bristol Food Network{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
-    <h2><i class="bi bi-cart3 me-2"></i>Your Cart</h2>
-    <a href="{% url 'products:product_list' %}" class="btn btn-outline-success">
-        <i class="bi bi-arrow-left me-1"></i> Continue Shopping
-    </a>
+<div class="d-flex justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+        <h2 class="mb-1"><i class="bi bi-cart3 me-2"></i>My Cart</h2>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">{{ cart.item_count }} item{{ cart.item_count|pluralize }}</p>
+    </div>
+    {% if items %}
+        <a href="{% url 'cart:checkout' %}" class="btn btn-success btn-lg px-4">
+            <i class="bi bi-bag-check me-2"></i> Checkout
+        </a>
+    {% endif %}
 </div>
 
-{% if not grouped %}
-    <div class="empty-state" data-reveal>
-        <div class="empty-icon"><i class="bi bi-cart-x"></i></div>
-        <h4>Your cart is empty</h4>
-        <p>Explore fresh seasonal produce from local Bristol producers.</p>
-        <a href="{% url 'products:product_list' %}" class="btn btn-success btn-lg mt-2">Browse Products</a>
-    </div>
-{% else %}
-    <div class="row g-4">
-        <div class="col-lg-8" data-reveal="left">
-            {% for producer_id, group in grouped.items %}
-            <div class="card shadow-sm mb-3 overflow-hidden">
-                <div class="card-header d-flex align-items-center gap-2 fw-semibold" style="background: linear-gradient(135deg, #F8F4E9, #ECE5D2); border-bottom: 1px solid #E0D8C7;">
-                    <i class="bi bi-shop" style="color: #2F5A3F;"></i> {{ group.producer.business_name }}
-                </div>
-                <div class="card-body p-0">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 35%;">Product</th>
-                                <th class="text-center" style="width: 160px;">Quantity</th>
-                                <th class="text-end" style="width: 90px;">Price</th>
-                                <th class="text-end" style="width: 90px;">Total</th>
-                                <th style="width: 50px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in group.items %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'products:product_detail' pk=item.product.pk %}" class="text-decoration-none fw-semibold">
-                                        {{ item.product.name }}
-                                    </a>
-                                    <small class="d-block text-muted" style="font-size: 0.75rem;">{{ item.product.unit }}</small>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <form method="post" action="{% url 'cart:update_cart' item_id=item.pk %}">
-                                        {% csrf_token %}
-                                        <div class="qty-stepper mx-auto">
-                                            <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<0)i.value=0; i.form.submit();"><i class="bi bi-dash"></i></button>
-                                            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.stock_quantity }}" onchange="this.form.submit()">
-                                            <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ item.product.stock_quantity }})i.value={{ item.product.stock_quantity }}; i.form.submit();"><i class="bi bi-plus"></i></button>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td class="text-end align-middle">£{{ item.product.price }}</td>
-                                <td class="text-end align-middle fw-semibold">£{{ item.line_total }}</td>
-                                <td class="text-center align-middle">
-                                    <form method="post" action="{% url 'cart:remove_from_cart' item_id=item.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Remove">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr style="border-top: 2px solid var(--border);">
-                                <td colspan="3" class="text-end fw-semibold">Producer subtotal</td>
-                                <td class="text-end fw-semibold">£{{ group.subtotal }}</td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+{% if items %}
+    {% regroup items by product.producer as producer_list %}
+
+    {% for producer in producer_list %}
+    <div class="card shadow-sm mb-3" data-reveal>
+        <div class="card-header d-flex align-items-center gap-2" style="background: linear-gradient(135deg, var(--cream), var(--cream-dark)); border-bottom: 1px solid var(--border-light);">
+            <i class="bi bi-shop" style="color: var(--harvest);"></i>
+            <span class="fw-semibold">{{ producer.grouper.business_name }}</span>
+        </div>
+        <div class="card-body p-0">
+            {% for item in producer.list %}
+            <div class="d-flex align-items-center p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0.75rem;" class="me-3">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center bg-light me-3" style="width: 60px; height: 60px; border-radius: 0.75rem;">
+                        <i class="bi bi-image text-muted" style="opacity: 0.3;"></i>
+                    </div>
+                {% endif %}
+                <div class="flex-grow-1 min-width-0">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <a href="{% url 'products:product_detail' item.product.pk %}" class="fw-semibold text-decoration-none" style="color: var(--forest);">{{ item.product.name }}</a>
+                            <span class="text-muted" style="font-size: 0.8rem;"> &times; {{ item.quantity }} {{ item.product.unit }}</span>
+                        </div>
+                        <span class="fw-bold" style="font-family: 'Fraunces', serif; color: var(--forest-dark);">£{{ item.line_total }}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <form action="{% url 'cart:add_to_cart' item.product.pk %}" method="post" class="d-flex align-items-center gap-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="redirect_to" value="{{ request.path }}">
+                            <div class="qty-stepper qty-stepper-sm">
+                                <button type="button" onclick="const i=this.nextElementSibling; i.stepDown(); if(i.value<1)i.value=1;"><i class="bi bi-dash"></i></button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock_quantity }}">
+                                <button type="button" onclick="const i=this.previousElementSibling; i.stepUp(); if(+i.value>{{ item.product.stock_quantity }})i.value={{ item.product.stock_quantity }};"><i class="bi bi-plus"></i></button>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Update</button>
+                        </form>
+                        <form action="{% url 'cart:remove_from_cart' item.id %}" method="post" class="ms-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+    </div>
+    {% endfor %}
 
-        <div class="col-lg-4" data-reveal="right">
-            <div class="card shadow-lg sticky-top" style="top: 6rem; border-radius: var(--radius-2xl);">
-                <div class="card-header text-white py-3" style="background: linear-gradient(135deg, var(--forest), var(--forest-dark)); border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;">
-                    <h6 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted">Subtotal <small>({{ cart.item_count }} item{{ cart.item_count|pluralize }})</small></span>
-                        <strong style="font-family: 'Fraunces', serif; font-size: 1.15rem;">£{{ total }}</strong>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small mb-3">
-                        <span>Platform fee (5%)</span>
-                        <span>included at checkout</span>
-                    </div>
-                    <hr>
-                    <a href="{% url 'cart:checkout' %}" class="btn btn-success w-100 btn-lg">
-                        <i class="bi bi-lock-fill me-2"></i> Proceed to Checkout
-                    </a>
-                </div>
-            </div>
+    <div class="text-end mt-4" data-reveal>
+        <div style="font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--forest);">
+            Total: <span class="fw-bold">£{{ total }}</span>
         </div>
+        <p class="text-muted" style="font-size: 0.8rem;">5% platform fee included</p>
+        <a href="{% url 'cart:checkout' %}" class="btn btn-success btn-lg px-5 mt-2">
+            <i class="bi bi-bag-check me-2"></i> Proceed to Checkout
+        </a>
+    </div>
+{% else %}
+    <div class="text-center py-5" data-reveal>
+        <i class="bi bi-cart-x" style="font-size: 3.5rem; color: var(--ink-muted); opacity: 0.2;"></i>
+        <h4 class="mt-3">Your cart is empty</h4>
+        <p class="text-muted">Discover fresh local produce from Bristol producers.</p>
+        <a href="{% url 'products:product_list' %}" class="btn btn-outline-success mt-2 px-4">
+            <i class="bi bi-basket me-2"></i> Browse Products
+        </a>
     </div>
 {% endif %}
 {% endblock %}

@@ -19,7 +19,6 @@
         <form method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
 
-            <!-- Product Details -->
             <div class="collapsible-section open mb-3" data-reveal>
                 <div class="collapse-header" onclick="this.parentElement.classList.toggle('open')">
                     <div class="d-flex align-items-center gap-2">
@@ -29,66 +28,80 @@
                     <i class="bi bi-chevron-down collapse-icon"></i>
                 </div>
                 <div class="collapse-body">
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-tag input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Product name</label>
-                        {{ form.name }}
+                    <div class="form-field">
+                        <span class="field-label">Product name</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-tag input-icon"></i>
+                            {{ form.name }}
+                        </div>
                         {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-body-text input-icon input-icon-top"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Description</label>
-                        {{ form.description }}
+                    <div class="form-field">
+                        <span class="field-label">Description</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-body-text input-icon"></i>
+                            {{ form.description }}
+                        </div>
                         {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>{% endif %}
                     </div>
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-grid input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Category</label>
-                                {{ form.category }}
+                            <div class="form-field">
+                                <span class="field-label">Category</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-grid input-icon"></i>
+                                    {{ form.category }}
+                                </div>
                                 {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="input-icon-group">
-                                <i class="bi bi-currency-pound input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Price</label>
-                                {{ form.price }}
+                            <div class="form-field">
+                                <span class="field-label">Price</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-currency-pound input-icon"></i>
+                                    {{ form.price }}
+                                </div>
                                 {% if form.price.errors %}<div class="text-danger small mt-1">{{ form.price.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="input-icon-group">
-                                <i class="bi bi-box input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Unit</label>
-                                {{ form.unit }}
+                            <div class="form-field">
+                                <span class="field-label">Unit</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-box input-icon"></i>
+                                    {{ form.unit }}
+                                </div>
                                 {% if form.unit.errors %}<div class="text-danger small mt-1">{{ form.unit.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
                     </div>
 
-                    <div class="row g-3 mt-2">
+                    <div class="row g-3">
                         <div class="col-md-4">
-                            <div class="input-icon-group">
-                                <i class="bi bi-boxes input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Stock quantity</label>
-                                {{ form.stock_quantity }}
+                            <div class="form-field">
+                                <span class="field-label">Stock quantity</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-boxes input-icon"></i>
+                                    {{ form.stock_quantity }}
+                                </div>
                                 {% if form.stock_quantity.errors %}<div class="text-danger small mt-1">{{ form.stock_quantity.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <label class="form-label mb-2" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Product image</label>
-                            <div class="image-upload-zone" onclick="document.getElementById('id_image').click()">
-                                <input type="file" name="image" accept="image/*" id="id_image" onchange="var l=document.getElementById('img-name'); if (this.files.length) l.textContent=this.files[0].name; else l.textContent='Click or drag to upload';">
-                                <i class="bi bi-cloud-arrow-up d-block mb-2"></i>
-                                <span class="upload-text d-block" id="img-name">Click or drag to upload</span>
-                                <span class="upload-hint d-block mt-1">JPG, PNG or WebP. Max 5MB.</span>
-                                {% if object.image %}
-                                    <span class="d-block mt-2 text-success" style="font-size: 0.8rem;">Current: {{ object.image.name }}</span>
-                                {% endif %}
+                            <div class="form-field">
+                                <span class="field-label">Product image</span>
+                                <div class="image-upload-zone" onclick="document.getElementById('id_image').click()">
+                                    <input type="file" name="image" accept="image/*" id="id_image" onchange="var l=document.getElementById('img-name'); if(this.files.length) l.textContent=this.files[0].name; else l.textContent='Click or drag to upload';">
+                                    <i class="bi bi-cloud-arrow-up d-block mb-2"></i>
+                                    <span class="upload-text d-block" id="img-name">Click or drag to upload</span>
+                                    <span class="upload-hint d-block mt-1">JPG, PNG or WebP. Max 5MB.</span>
+                                    {% if object.image %}
+                                        <span class="d-block mt-2 text-success" style="font-size: 0.8rem;">Current: {{ object.image.name }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,7 +115,6 @@
                 </div>
             </div>
 
-            <!-- Seasonal Availability -->
             <div class="collapsible-section open mb-3" data-reveal>
                 <div class="collapse-header" onclick="this.parentElement.classList.toggle('open')">
                     <div class="d-flex align-items-center gap-2">
@@ -112,31 +124,36 @@
                     <i class="bi bi-chevron-down collapse-icon"></i>
                 </div>
                 <div class="collapse-body">
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-sun input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Availability status</label>
-                        {{ form.availability_status }}
+                    <div class="form-field">
+                        <span class="field-label">Availability status</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-sun input-icon"></i>
+                            {{ form.availability_status }}
+                        </div>
                     </div>
                     <div id="season-dates" class="row g-3 {% if form.initial.availability_status != 'in_season' %}d-none{% endif %}">
                         <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-calendar-check input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Season start</label>
-                                {{ form.season_start }}
+                            <div class="form-field">
+                                <span class="field-label">Season start</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-calendar-check input-icon"></i>
+                                    {{ form.season_start }}
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-calendar-x input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Season end</label>
-                                {{ form.season_end }}
+                            <div class="form-field">
+                                <span class="field-label">Season end</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-calendar-x input-icon"></i>
+                                    {{ form.season_end }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Allergens -->
             <div class="collapsible-section open mb-3" data-reveal>
                 <div class="collapse-header" onclick="this.parentElement.classList.toggle('open')">
                     <div class="d-flex align-items-center gap-2">
@@ -160,7 +177,6 @@
                 </div>
             </div>
 
-            <!-- Quality Information -->
             <div class="collapsible-section mb-4" data-reveal>
                 <div class="collapse-header" onclick="this.parentElement.classList.toggle('open')">
                     <div class="d-flex align-items-center gap-2">
@@ -173,17 +189,21 @@
                 <div class="collapse-body">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-basket input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Harvest date</label>
-                                {{ form.harvest_date }}
+                            <div class="form-field">
+                                <span class="field-label">Harvest date</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-basket input-icon"></i>
+                                    {{ form.harvest_date }}
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-calendar-heart input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Best before</label>
-                                {{ form.best_before }}
+                            <div class="form-field">
+                                <span class="field-label">Best before</span>
+                                <div class="simple-input-group">
+                                    <i class="bi bi-calendar-heart input-icon"></i>
+                                    {{ form.best_before }}
+                                </div>
                             </div>
                         </div>
                     </div>

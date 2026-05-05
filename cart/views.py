@@ -2,95 +2,72 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.decorators import customer_required
+from .forms import CheckoutForm
 from orders.models import Order, OrderItem, Payment
 from products.models import Product
-
-from .forms import CheckoutForm
 from .models import Cart, CartItem
 
 
 @login_required
+@customer_required
 def cart_detail(request):
-    if request.user.role != 'customer':
-        return HttpResponseForbidden("Only customers have a cart.")
     cart, _ = Cart.objects.get_or_create(customer=request.user)
+    items = cart.items.select_related('product__producer').all()
     return render(request, 'cart/cart_detail.html', {
         'cart': cart,
-        'grouped': cart.get_items_by_producer(),
+        'items': items,
         'total': cart.get_total(),
     })
 
 
+@login_required
 @customer_required
 def add_to_cart(request, product_id):
-    if request.method != 'POST':
-        return redirect('products:product_detail', pk=product_id)
-
     product = get_object_or_404(Product, pk=product_id)
-
-    if not product.is_available:
-        messages.error(request, f'"{product.name}" is not currently available.')
-        return redirect('products:product_detail', pk=product_id)
-
-    try:
-        qty = max(1, int(request.POST.get('quantity', 1)))
-    except (ValueError, TypeError):
-        qty = 1
-
-    if qty > product.stock_quantity:
-        messages.error(request, f'Only {product.stock_quantity} units available.')
-        return redirect('products:product_detail', pk=product_id)
+    redirect_to = request.POST.get('redirect_to', '')
 
     cart, _ = Cart.objects.get_or_create(customer=request.user)
     item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    qty = int(request.POST.get('quantity', 1))
     if not created:
         item.quantity = min(item.quantity + qty, product.stock_quantity)
     else:
-        item.quantity = qty
+        item.quantity = min(qty, product.stock_quantity)
     item.save()
 
     messages.success(request, f'"{product.name}" added to your cart.')
-    return redirect('products:product_detail', pk=product_id)
+    if redirect_to:
+        return redirect(redirect_to)
+    return redirect('cart:cart_detail')
 
 
+@login_required
 @customer_required
 def update_cart(request, item_id):
-    if request.method != 'POST':
-        return redirect('cart:cart_detail')
-
     item = get_object_or_404(CartItem, pk=item_id, cart__customer=request.user)
-
-    try:
-        qty = int(request.POST.get('quantity', 1))
-    except (ValueError, TypeError):
-        qty = 1
-
-    if qty <= 0:
-        item.delete()
-        messages.info(request, 'Item removed from cart.')
-    else:
-        item.quantity = min(qty, item.product.stock_quantity)
-        item.save()
-
+    qty = max(1, int(request.POST.get('quantity', 1)))
+    item.quantity = min(qty, item.product.stock_quantity)
+    item.save()
+    redirect_to = request.POST.get('redirect_to', '')
+    if redirect_to:
+        return redirect(redirect_to)
     return redirect('cart:cart_detail')
 
 
+@login_required
 @customer_required
 def remove_from_cart(request, item_id):
-    if request.method != 'POST':
-        return redirect('cart:cart_detail')
-
     item = get_object_or_404(CartItem, pk=item_id, cart__customer=request.user)
-    product_name = item.product.name
     item.delete()
-    messages.info(request, f'"{product_name}" removed from cart.')
+    messages.success(request, f'"{item.product.name}" removed from your cart.')
     return redirect('cart:cart_detail')
 
 
+@login_required
 @customer_required
 def checkout(request):
     cart, _ = Cart.objects.get_or_create(customer=request.user)
@@ -117,8 +94,7 @@ def checkout(request):
                 names = ', '.join(i.product.name for i in out_of_stock)
                 messages.error(
                     request,
-                    f'The following items are no longer available: {names}. '
-                    'Please update your cart.'
+                    f'The following items are no longer available: {names}. Please update your cart.'
                 )
                 return redirect('cart:cart_detail')
 
@@ -150,13 +126,13 @@ def checkout(request):
 
                 cart.items.all().delete()
 
+            messages.success(request, f'Order #{order.order_number} placed successfully!')
             return redirect('cart:order_confirmation', order_id=order.pk)
     else:
         form = CheckoutForm(initial=initial)
 
     return render(request, 'cart/checkout.html', {
         'form': form,
-        'cart': cart,
         'cart_items': cart_items,
         'total': cart.get_total(),
     })

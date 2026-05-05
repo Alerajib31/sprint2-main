@@ -44,36 +44,39 @@
                         <span>Personal Details</span>
                     </div>
 
-                    <div class="row g-3 mb-2">
-                        <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-person input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">First name</label>
-                                {{ form.first_name }}
-                                {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
-                            </div>
+                    <div class="form-field mb-3">
+                        <span class="field-label">First name</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-person input-icon"></i>
+                            {{ form.first_name }}
                         </div>
-                        <div class="col-md-6">
-                            <div class="input-icon-group">
-                                <i class="bi bi-person input-icon"></i>
-                                <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Last name</label>
-                                {{ form.last_name }}
-                                {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
-                            </div>
-                        </div>
+                        {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-envelope input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Email address</label>
-                        {{ form.email }}
+                    <div class="form-field mb-3">
+                        <span class="field-label">Last name</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-person input-icon"></i>
+                            {{ form.last_name }}
+                        </div>
+                        {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="form-field mb-3">
+                        <span class="field-label">Email address</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-envelope input-icon"></i>
+                            {{ form.email }}
+                        </div>
                         {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="input-icon-group mb-2">
-                        <i class="bi bi-telephone input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Phone <span class="text-muted fw-normal">(optional)</span></label>
-                        {{ form.phone }}
+                    <div class="form-field mb-3">
+                        <span class="field-label">Phone <span class="text-muted fw-normal" style="text-transform: none; letter-spacing: 0;">(optional)</span></span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-telephone input-icon"></i>
+                            {{ form.phone }}
+                        </div>
                     </div>
 
                     <div class="section-divider">
@@ -81,19 +84,23 @@
                         <span>Security</span>
                     </div>
 
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-lock input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Password</label>
-                        {{ form.password1 }}
-                        <div class="form-text">{{ form.password1.help_text|safe }}</div>
+                    <div class="form-field mb-3">
+                        <span class="field-label">Password</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-lock input-icon"></i>
+                            {{ form.password1 }}
+                        </div>
+                        <div class="form-text mt-1">{{ form.password1.help_text|safe }}</div>
                         {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors.0 }}</div>{% endif %}
-                        <div class="password-strength"><div class="strength-bar" id="pass-strength-bar"></div></div>
+                        <div class="password-strength mt-2"><div class="strength-bar" id="pass-strength-bar"></div></div>
                     </div>
 
-                    <div class="input-icon-group mb-2">
-                        <i class="bi bi-lock-fill input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Confirm password</label>
-                        {{ form.password2 }}
+                    <div class="form-field mb-3">
+                        <span class="field-label">Confirm password</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-lock-fill input-icon"></i>
+                            {{ form.password2 }}
+                        </div>
                         {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors.0 }}</div>{% endif %}
                     </div>
 
@@ -102,17 +109,21 @@
                         <span>Delivery Address</span>
                     </div>
 
-                    <div class="input-icon-group mb-3">
-                        <i class="bi bi-house input-icon input-icon-top"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Street address</label>
-                        {{ form.delivery_address }}
+                    <div class="form-field mb-3">
+                        <span class="field-label">Street address</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-house input-icon"></i>
+                            {{ form.delivery_address }}
+                        </div>
                         {% if form.delivery_address.errors %}<div class="text-danger small mt-1">{{ form.delivery_address.errors.0 }}</div>{% endif %}
                     </div>
 
-                    <div class="input-icon-group mb-4">
-                        <i class="bi bi-mailbox input-icon"></i>
-                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted);">Postcode</label>
-                        {{ form.postcode }}
+                    <div class="form-field mb-4">
+                        <span class="field-label">Postcode</span>
+                        <div class="simple-input-group">
+                            <i class="bi bi-mailbox input-icon"></i>
+                            {{ form.postcode }}
+                        </div>
                         {% if form.postcode.errors %}<div class="text-danger small mt-1">{{ form.postcode.errors.0 }}</div>{% endif %}
                     </div>
 
